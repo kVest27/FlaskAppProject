@@ -8,6 +8,13 @@ from flask_bootstrap import Bootstrap
 from werkzeug.utils import secure_filename
 import os
 import net as neuronet
+import base64
+from PIL import Image
+from io import BytesIO
+from flask import request, Response, jsonify
+from net import getresult  # Импорт вашей функции из net.py
+
+
 
 app = Flask(__name__)
 
@@ -29,6 +36,24 @@ def form():
         return "reCAPTCHA успешно пройдена!"
     return render_template('form.html', form=form)
 
+@app.route("/apinet", methods=['POST'])
+def apinet():
+    if request.mimetype != 'application/json':
+        return Response(jsonify({"error": "Invalid content type"}), status=400)
+    try:
+        # Извлечение изображения из запроса
+        data = request.get_json()
+        filebytes = data['imagebin'].encode('utf-8')
+        cfile = base64.b64decode(filebytes)
+        img = Image.open(BytesIO(cfile))
+        
+        # Классификация изображения
+        decode = getresult([img])
+        result = {elem[0][1]: str(elem[0][2]) for elem in decode}
+        
+        return jsonify(result)
+    except Exception as e:
+        return Response(jsonify({"error": str(e)}), status=500)
 
 
 # Декоратор для вывода страницы по умолчанию
