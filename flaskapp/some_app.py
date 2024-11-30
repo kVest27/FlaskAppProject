@@ -13,7 +13,7 @@ from PIL import Image
 from io import BytesIO
 from flask import request, Response, jsonify
 from net import getresult  # Импорт вашей функции из net.py
-
+import lxml.etree as ET
 
 
 app = Flask(__name__)
@@ -28,6 +28,23 @@ Bootstrap(app)
 
 class CaptchaForm(FlaskForm):
     recaptcha = RecaptchaField()
+
+@app.route("/apixml", methods=['GET'])
+def apixml():
+    try:
+        # Парсим XML файл
+        dom = ET.parse("./static/xml/file.xml")
+        # Парсим XSLT шаблон
+        xslt = ET.parse("./static/xml/file.xslt")
+        # Создаем трансформер
+        transform = ET.XSLT(xslt)
+        # Преобразуем XML с помощью XSLT
+        new_html = transform(dom)
+        # Конвертируем результат в строку
+        strfile = ET.tostring(new_html, pretty_print=True, encoding='unicode')
+        return strfile, 200, {'Content-Type': 'text/html'}
+    except Exception as e:
+        return f"Ошибка: {str(e)}", 500
 
 @app.route('/form', methods=['GET', 'POST'])
 def form():
