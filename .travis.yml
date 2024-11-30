@@ -1,5 +1,7 @@
 language: python
+python:
+  - "3.8"  # Укажите версию Python
 install:
-  - pip3 install flask
+  - pip install flask
 script:
-  - python3 ./flaskapp/some_app.py
+  - bash ./flaskapp/run_flask.sh
