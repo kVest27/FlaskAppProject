@@ -7,4 +7,4 @@ sleep 5
 echo $APP_PID
 kill -TERM $APP_PID
 echo "Gunicorn process terminated"
-exit 0
+exit $?
