@@ -28,16 +28,17 @@ resnet = keras.applications.resnet_v2.ResNet50V2(
 )
 
 def read_image_files(files_max_count, dir_name):
-    files = os.listdir(dir_name)
-    files_count = min(files_max_count, len(files))  # Ограничиваем количество файлов
+    files = [item.name for item in os.scandir(dir_name) if item.is_file()]
+    files_count = min(files_max_count, len(files))
     image_box = []
-
-    for i in range(files_count):
+    
+    for file_name in files[:files_count]:
         try:
-            image_path = os.path.join(dir_name, files[i])
-            image_box.append(Image.open(image_path))  # Открываем изображение
+            img_path = os.path.join(dir_name, file_name)
+            image_box.append(Image.open(img_path))
         except Exception as e:
-            print(f"Ошибка при чтении файла {files[i]}: {e}")
+            print(f"Ошибка при чтении файла {file_name}: {e}")
+            continue
 
     return files_count, image_box
 
