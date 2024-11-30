@@ -19,6 +19,18 @@ app.config['RECAPTCHA_PRIVATE_KEY'] = 'ваш_секретный_ключ'
 app.config['RECAPTCHA_OPTIONS'] = {'theme': 'white'}
 Bootstrap(app)
 
+class CaptchaForm(FlaskForm):
+    recaptcha = RecaptchaField()
+
+@app.route('/form', methods=['GET', 'POST'])
+def form():
+    form = CaptchaForm()
+    if form.validate_on_submit():
+        return "reCAPTCHA успешно пройдена!"
+    return render_template('form.html', form=form)
+
+
+
 # Декоратор для вывода страницы по умолчанию
 @app.route("/")
 def hello():
