@@ -1,4 +1,6 @@
 #!/bin/bash
+export FLASK_APP=some_app.py
+flask run --host=0.0.0.0 --port=5000
 gunicorn --bind 127.0.0.1:5000 wsgi:app & APP_PID=$!
 sleep 5
 echo "Start client tests"
