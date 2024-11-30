@@ -10,3 +10,12 @@ echo $APP_PID
 kill -TERM $APP_PID
 echo "Gunicorn process terminated"
 exit $?
+
+echo "Запуск клиента для тестирования API..."
+python3 client.py
+APP_CODE=$?
+
+echo "Остановка сервера..."
+kill -TERM $APP_PID
+
+exit $APP_CODE
