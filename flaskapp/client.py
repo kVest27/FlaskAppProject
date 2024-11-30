@@ -25,3 +25,14 @@ if res.ok:
     print(res.json())
 else:
     print(f"Ошибка: {res.status_code}, {res.text}")
+
+try:
+    r = requests.get('http://localhost:5000/apixml')
+    print(r.status_code)
+    if r.status_code != 200:
+        print("Ошибка сервера")
+        exit(1)
+    print(r.text)
+except Exception as e:
+    print(f"Ошибка клиента: {e}")
+    exit(1)
