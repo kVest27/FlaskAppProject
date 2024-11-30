@@ -1,3 +1,9 @@
+<form method="POST" action="/submit">
+  {{ form.hidden_tag() }}
+  {{ form.recaptcha }}
+  <button type="submit">Отправить</button>
+</form>
+
 <html>
     <head>
         {% if some_str %}
